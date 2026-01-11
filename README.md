@@ -30,8 +30,8 @@ Està pensada per a docents que volen crear material educatiu de manera ràpida 
 Clona el repositori i instal·la les dependències:
 
 ```bash
-git clone https://github.com/el-teu-usuari/generador-tasques-pdf.git
-cd generador-tasques-pdf
+git clone https://github.com/PauRodriguezGarcia/edutask-ai.git
+cd edutask-ai
 pip install -r requirements.txt
 ```
 
