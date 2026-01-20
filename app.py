@@ -50,7 +50,7 @@ def extract_text_from_pdf(pdf_file):
     return text  # Retornem el text complet del PDF
 
 
-def generate_work_from_text(text, num_tasks, question_types, generate_answers):
+def generate_work_from_text(text, num_tasks, question_types, generate_answers, retry=False):
     """
     Genera preguntes/activitats a partir del text extret del PDF, segons el nombre i el tipus seleccionats.
 
@@ -78,7 +78,7 @@ A continuació tens el contingut d’una unitat didàctica.
 A partir d’aquest contingut, crea un conjunt de {num_tasks} activitats o preguntes.
 
 🔹 Tipus de preguntes que has de generar:
-{tipus}
+SOLAMENT POTS GENERAR PREGUNTES DE {tipus}
 
 🔹 Instruccions específiques:
 - Les preguntes han de ser adequades per a alumnes de secundària
@@ -96,8 +96,12 @@ Tasques i preguntes:
 
     # Fem la crida al model i retornem el text generat
     response = chat_model.invoke(prompt)
-    print(response.content)
-    return response.content[0].get("text", "Sin respuesta")
+    try:
+        return response.content[0].get("text", "Sin respuesta")
+    except Exception as e:
+        # Si dona error una vegada, ho reintentem
+        print(e)
+        return generate_work_from_text(text, num_tasks, question_types, generate_answers, retry=True)
 
 # ==========================
 # INTERFÍCIE D'USUARI (STREAMLIT)
